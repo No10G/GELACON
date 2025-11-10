@@ -1,144 +1,121 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib 
 import requests
-import os
+import datetime
+from collections import defaultdict
 
-# --- A. 定数とモデルのロード ---
+# --- 予測に必要な定数 (学習データと一致) ---
+GRADIENT_RATE = 0.6  
+MODEL_FEATURE_ORDER = [
+    'MaxSnowDepth', 'Snowfall', 'AvgWindSpeed', 'Adj_Temp_Min', 
+    'Night_Chill_Factor', 'Cumulative_Heat_History', 'Surface_Hardening_Risk', 'Course_Elev'
+]
 
-# 補正値とコース定義（学習データと一致）
+# リゾートごとの設定（API座標、補正値、標高）
 ADJUSTMENT_MAP = {
-    '神立スキー場 (1000m)': 3.96,
-    '丸沼高原 (2000m)': 9.78
+    '神立スノーリゾート (1000m)': {'adj': 3.96, 'elev': 1000, 'lat': 36.942, 'lon': 138.810},
+    '丸沼高原スキー場 (2000m)': {'adj': 9.78, 'elev': 2000, 'lat': 36.815, 'lon': 139.331}
 }
-ELEVATION_MAP = {
-    '神立スキー場 (1000m)': 1000,
-    '丸沼高原 (2000m)': 2000
-}
-# TARGET_CODEを人間に分かりやすい名前に変換する辞書
-CONDITIONS = {
-    0: 'パウダー ✨', 1: '神バーン 💎', 2: 'アイスバーン ⚠️', 3: 'ゴロゴロ/シャバ雪 ☀️'
-}
-
-try:
-    model = joblib.load('gelecon_predictor_model.pkl')
-    model_loaded = True
-except FileNotFoundError:
-    st.error("エラー: 'gelecon_predictor_model.pkl'が見つかりません。XGBoostの学習が完了しているか確認してください。")
-    model_loaded = False
-
-
-# --- B. 予測に必要なカスタム特徴量の計算関数 ---
-def calculate_features_for_prediction(user_data, adjustment_value, course_elev):
+API_KEY = "1a56b1626e30118ca94615f08b7005c5" # ★APIキーをここに設定★
+def prepare_and_predict_forecast(course_name, api_key, cached_history):
     """
-    ユーザー入力をモデルが学習した8つのカスタム特徴量に変換する
+    指定されたコース名に基づき、未来5日間のAPIデータを取得・整形し、モデル入力用のDataFrameを生成する。
+    
+    cached_history: ファイルキャッシュから読み込んだ前日MaxTempなどの情報。
     """
     
-    # 1. 標高補正
-    adj_temp_min = user_data['MinTemp'] - adjustment_value
-    adj_temp_max = user_data['MaxTemp'] - adjustment_value
+    resort_info = ADJUSTMENT_MAP.get(course_name)
+    if not resort_info:
+        return pd.DataFrame(), "エラー: コース設定が見つかりません。"
     
-    # 2. Night Chill Factor: (ユーザー入力値で計算)
-    # PrevDayMaxTemp (前日の熱) - Adj_Temp_Min (当日の真の冷え込み)
-    night_chill = user_data['PrevDayMaxTemp'] - adj_temp_min
+    # 補正値と座標の設定
+    adjustment_value = resort_info['adj']
+    course_elev = resort_info['elev']
+    lat, lon = resort_info['lat'], resort_info['lon']
     
-    # 3. Cumulative Heat History: (過去7日間の0度超え日数で推定)
-    # 簡易計算: 5 * 0度超え日数 (熱履歴のペナルティ)
-    heat_history = 5 * user_data['HeatDays']
+    # --- 1. APIデータの取得 ---
+    BASE_URL = "https://api.openweathermap.org/data/2.5/forecast" 
+    params = {'lat': lat, 'lon': lon, 'units': 'metric', 'appid': api_key}
     
-    # 4. Surface Hardening Risk: (風速^2 * 低温時の重み)
-    # Adj_Temp_Minが0度以下なら1.5倍の重みをかける
-    hardening_risk = user_data['AvgWindSpeed']**2 * (1.5 if adj_temp_min < 0 else 1.0)
-    
-    # 5. ★モデルが期待する厳密な順序のDataFrameを作成★
-    X_predict = pd.DataFrame({
-        'MaxSnowDepth': [user_data['MaxSnowDepth']],
-        'Snowfall': [user_data['Snowfall']],
-        'AvgWindSpeed': [user_data['AvgWindSpeed']],
-        'Adj_Temp_Min': [adj_temp_min],
-        'Night_Chill_Factor': [night_chill],
-        'Cumulative_Heat_History': [heat_history],
-        'Surface_Hardening_Risk': [hardening_risk],
-        'Course_Elev': [course_elev] 
-    })
-    return X_predict
+    try:
+        response = requests.get(BASE_URL, params=params, timeout=5)
+        response.raise_for_status()
+        api_data = response.json()
+    except requests.exceptions.RequestException as e:
+        return pd.DataFrame(), f"APIエラー: {e}"
 
+    # --- 2. 日別集計と特徴量計算の初期値設定 ---
+    daily_data = defaultdict(lambda: {'temp_max': -float('inf'), 'temp_min': float('inf'), 'winds': [], 'snows': [], 'date_str': ''})
+    today = datetime.date.today()
+    
+    # キャッシュから初期値を取得
+    prev_day_max_temp = cached_history.get('PrevDayMaxTemp', 5.0)  # 前日MaxTempの初期値 (5.0℃と仮定)
+    cumulative_heat_history = cached_history.get('CumulativeHeatHistory', 0.0) # 累積熱履歴の初期値
+    max_snow_depth = cached_history.get('MaxSnowDepth', 150) # 積雪深 (変化しないと仮定)
 
-# --- C. Streamlit UI (ユーザーインターフェース) ---
-
-st.title("❄️ GELECON AIバーン予測システム")
-st.markdown("##### ZOZO面接デモ：カスタム特徴量に基づく予測")
-
-if model_loaded:
-    
-    st.header("1. コースと基本条件の入力")
-    
-    col1, col2 = st.columns(2)
-    course_name = col1.selectbox("予測コースを選択", list(ADJUSTMENT_MAP.keys()))
-    adjustment_val = ADJUSTMENT_MAP[course_name]
-    elev_val = ELEVATION_MAP[course_name]
-
-    col2.markdown(f"**推定標高**: {elev_val}m")
-    col2.markdown(f"**気温補正**: -{adjustment_val:.2f}℃")
-    
-    col3, col4, col5 = st.columns(3)
-    
-    # 基本情報
-    max_snow = col3.number_input("最深積雪 (cm)", min_value=10, max_value=300, value=150)
-    snowfall = col4.number_input("新雪量 (cm)", min_value=0.0, max_value=50.0, value=5.0)
-    avg_wind = col5.number_input("平均風速 (m/s)", min_value=0.0, max_value=15.0, value=3.0)
-
-    # カスタム特徴量のための入力
-    st.subheader("2. 凍結・熱履歴の推定入力")
-    
-    col6, col7, col8 = st.columns(3)
-    
-    min_temp = col6.number_input("当日の最低気温 (℃) - 山頂推定", min_value=-30.0, max_value=5.0, value=-8.0)
-    prev_day_max_temp = col7.number_input("前日の最高気温 (℃) - 観測地", min_value=-5.0, max_value=15.0, value=5.0)
-    heat_days = col8.number_input("過去7日の0℃超え日数", min_value=0, max_value=7, value=1)
-    
-    
-    # --- 予測の実行 ---
-    
-    if st.button("🏔️ 雪質を予測する"):
+    # --- 3. 3時間ごとのデータ処理と集計 ---
+    for item in api_data.get('list', []):
+        dt_object = datetime.datetime.fromtimestamp(item['dt'])
+        date_key = dt_object.date()
         
-        # ユーザー入力をディクショナリに格納
-        user_input_data = {
-            'MaxSnowDepth': max_snow, 'Snowfall': snowfall, 'AvgWindSpeed': avg_wind,
-            'MinTemp': min_temp, 'PrevDayMaxTemp': prev_day_max_temp, 'HeatDays': heat_days,
+        # 今日から5日間のデータに限定
+        if date_key < today or (date_key - today).days >= 5:
+            continue
+
+        # 日別集計
+        daily_data[date_key]['temp_max'] = max(daily_data[date_key]['temp_max'], item['main']['temp_max'])
+        daily_data[date_key]['temp_min'] = min(daily_data[date_key]['temp_min'], item['main']['temp_min'])
+        daily_data[date_key]['winds'].append(item['wind']['speed'])
+        daily_data[date_key]['snows'].append(item.get('snow', {}).get('3h', 0))
+        daily_data[date_key]['date_str'] = date_key.strftime('%Y-%m-%d')
+    
+    # --- 4. 最終DataFrameの構築と特徴量計算 ---
+    final_records = []
+    
+    for date_key in sorted(daily_data.keys()):
+        day_data = daily_data[date_key]
+        
+        # A. 標高補正
+        adj_min = day_data['temp_min'] - adjustment_value
+        adj_max = day_data['temp_max'] - adjustment_value
+        
+        # B. Night Chill Factor (急冷度)
+        night_chill = prev_day_max_temp - adj_min
+        
+        # C. 累積熱履歴の更新と計算
+        heat_daily = np.maximum(0, adj_max - 0)
+        cumulative_heat_history += heat_daily # 前日の累積に当日の熱を足す
+        
+        # D. 雪面硬化リスク
+        avg_wind = np.mean(day_data['winds'])
+        hardening_risk = avg_wind**2 * (1.5 if adj_min < 0 else 1.0)
+        
+        # E. 降雪量合計 (mmをcmに変換)
+        snowfall_cm = sum(day_data['snows']) / 10 
+        
+        # F. XGBoostモデルに渡すレコードを作成 (順序厳守)
+        record = {
+            'MaxSnowDepth': max_snow_depth,
+            'Snowfall': snowfall_cm,
+            'AvgWindSpeed': avg_wind,
+            'Adj_Temp_Min': adj_min,
+            'Night_Chill_Factor': night_chill,
+            'Cumulative_Heat_History': cumulative_heat_history,
+            'Surface_Hardening_Risk': hardening_risk,
+            'Course_Elev': course_elev,
+            # (表示用に日付を含める)
+            'Date': day_data['date_str']
         }
         
-        # モデル入力形式に変換 (8つの特徴量を計算)
-        X_predict = calculate_features_for_prediction(user_input_data, adjustment_val, elev_val)
+        final_records.append(record)
         
-        # 予測実行
-        prediction_code = model.predict(X_predict)[0]
-        prediction_proba = model.predict_proba(X_predict)[0]
-        
-        final_condition = CONDITIONS.get(prediction_code, "不明")
-        confidence = prediction_proba[prediction_code] * 100
+        # G. 翌日の Night Chill Factor のために PrevDay_MaxTemp を更新
+        prev_day_max_temp = day_data['temp_max'] 
 
-        
-        st.markdown("---")
-        st.header("4. GELECON AI予測結果")
-        
-        # 最終結果の表示
-        if prediction_code == 3 or prediction_code == 2:
-             st.error(f"予測結果: **{final_condition}** ({confidence:.1f}% 信頼度) 🚫")
-        else:
-             st.success(f"予測結果: **{final_condition}** ({confidence:.1f}% 信頼度) ✅")
-             
-        # 予測理由 (カスタムアナリシス)
-        st.subheader("予測の根拠 (AIアナリシス)")
-        
-        st.markdown(f"""
-        - **夜間急冷度**: {X_predict['Night_Chill_Factor'].iloc[0]:.2f} pt (前日の熱と当日の冷え込みの差)
-        - **熱履歴**: {X_predict['Cumulative_Heat_History'].iloc[0]:.2f}pt (過去の雪質劣化の蓄積)
-        - **硬化リスク**: {X_predict['Surface_Hardening_Risk'].iloc[0]:.2f}pt (風と低温による硬化度合い)
-        """)
-
-# --- 実行方法の案内 ---
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 🛠️ アプリの実行方法")
-st.sidebar.code("streamlit run streamlit_app.py")
+    # 最終的な DataFrame を構築し、XGBoostの入力順に並べ替える
+    df_predict = pd.DataFrame(final_records)
+    
+    # 最終的な出力カラムの順序を決定 (Dateは表示用なので除く)
+    prediction_cols = [col for col in MODEL_FEATURE_ORDER]
+    
+    return df_predict, df_predict[prediction_cols]

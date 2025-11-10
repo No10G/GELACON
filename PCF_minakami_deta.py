@@ -10,7 +10,7 @@ import numpy as np
 # 取得したいデータの基準日（今日）
 TODAY = datetime.date(2025, 11, 11) # 動作確認のため固定。実際は datetime.date.today() を使用してください。
 TARGET_DAYS = 5
-API_KEY = "1a56b1626e30118ca94615f08b7005c5" 
+API_KEY = "" 
 # みなかみ町の座標（気象庁のデータ地点に近い）
 LATITUDE = 36.815 
 LONGITUDE = 139.331
@@ -115,7 +115,7 @@ def get_future_weather_forecast(today, target_days, api_key, lat, lon):
         data = response.json()
         
     except requests.exceptions.RequestException as e:
-        print(f"\n--- 致命的なエラー ---")
+        print(f"\n--- エラー ---")
         print(f"APIアクセスエラーが発生しました: {e}")
         return []
 
