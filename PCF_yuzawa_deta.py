@@ -7,13 +7,13 @@ from collections import defaultdict
 import numpy as np
 
 # --- 1. 共通設定 ---
-# 取得したいデータの基準日（今日）
+# 取得したいデータの基準日
 TODAY = datetime.date(2025, 11, 8) # 動作確認のため固定。実際は datetime.date.today() を使用してください。
 TARGET_DAYS = 5
 API_KEY = "1a56b1626e30118ca94615f08b7005c5" 
-# みなかみ町の座標（気象庁のデータ地点に近い）
-LATITUDE = 36.815 
-LONGITUDE = 139.331
+# 湯沢の座標
+LATITUDE = 36.565
+LONGITUDE = 138.486
 # ---------------------
 
 
@@ -42,8 +42,8 @@ def get_past_weather_data(today, target_days):
         
         # URLパラメータの設定 (月の最初の日にアクセス) - みなかみ（群馬県）
         params = {
-            'prec_no': 42,
-            'block_no': 1019,
+            'prec_no': 54,
+            'block_no': '0544',
             'year': year,
             'month': month,
             'day': 1, 
@@ -187,7 +187,7 @@ final_header = [
 ]
 
 print("\n" + "="*50)
-print(f"### 📊 気象データ統合結果 (みなかみ: {TARGET_DAYS}日間の実績と{TARGET_DAYS}日間の予報)")
+print(f"### 📊 気象データ統合結果 湯沢: {TARGET_DAYS}日間の実績と{TARGET_DAYS}日間の予報)")
 print(f"**基準日:** {TODAY}")
 print("="*50)
 
