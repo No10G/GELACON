@@ -8,9 +8,10 @@ import numpy as np
 
 # --- 1. 共通設定 ---
 # 取得したいデータの基準日（今日）
+
 TODAY = datetime.date(2025, 11, 11) # 動作確認のため固定。実際は datetime.date.today() を使用してください。
 TARGET_DAYS = 5
-API_KEY = "" 
+API_KEY = "712944967f82ebaa54544d29577bd6c6" 
 # みなかみ町の座標（気象庁のデータ地点に近い）
 LATITUDE = 36.815 
 LONGITUDE = 139.331

@@ -16,7 +16,7 @@ ADJUSTMENT_MAP = {
     '神立スノーリゾート (1000m)': {'adj': 3.96, 'elev': 1000, 'lat': 36.942, 'lon': 138.810},
     '丸沼高原スキー場 (2000m)': {'adj': 9.78, 'elev': 2000, 'lat': 36.815, 'lon': 139.331}
 }
-API_KEY = "1a56b1626e30118ca94615f08b7005c5" # ★APIキーをここに設定★
+API_KEY = "712944967f82ebaa54544d29577bd6c6" # ★APIキーをここに設定★
 def prepare_and_predict_forecast(course_name, api_key, cached_history):
     """
     指定されたコース名に基づき、未来5日間のAPIデータを取得・整形し、モデル入力用のDataFrameを生成する。
