@@ -1,0 +1,83 @@
+{
+    "timestamp": "2025-11-11 11:29:16",
+    "resorts": {
+        "Kandatsu": {
+            "forecast_data": [
+                {
+                    "Date": "11月11日",
+                    "MaxTemp": 5.27,
+                    "MinTemp": -1.1,
+                    "AvgWindSpeed": 2.62,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月12日",
+                    "MaxTemp": 7.54,
+                    "MinTemp": -2.8,
+                    "AvgWindSpeed": 1.76,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月13日",
+                    "MaxTemp": 10.84,
+                    "MinTemp": 1.32,
+                    "AvgWindSpeed": 1.48,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月14日",
+                    "MaxTemp": 7.77,
+                    "MinTemp": -0.19,
+                    "AvgWindSpeed": 2.35,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月15日",
+                    "MaxTemp": 8.61,
+                    "MinTemp": -0.86,
+                    "AvgWindSpeed": 1.35,
+                    "Snowfall": 0.0
+                }
+            ]
+        },
+        "Marunuma": {
+            "forecast_data": [
+                {
+                    "Date": "11月11日",
+                    "MaxTemp": 8.21,
+                    "MinTemp": 0.03,
+                    "AvgWindSpeed": 2.46,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月12日",
+                    "MaxTemp": 9.42,
+                    "MinTemp": -1.22,
+                    "AvgWindSpeed": 1.49,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月13日",
+                    "MaxTemp": 12.88,
+                    "MinTemp": 1.95,
+                    "AvgWindSpeed": 1.53,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月14日",
+                    "MaxTemp": 10.51,
+                    "MinTemp": 1.83,
+                    "AvgWindSpeed": 2.16,
+                    "Snowfall": 0.0
+                },
+                {
+                    "Date": "11月15日",
+                    "MaxTemp": 10.21,
+                    "MinTemp": 0.34,
+                    "AvgWindSpeed": 1.35,
+                    "Snowfall": 0.0
+                }
+            ]
+        }
+    }
+}
