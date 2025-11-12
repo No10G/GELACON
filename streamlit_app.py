@@ -166,7 +166,9 @@ if model_loaded:
     st.plotly_chart(fig, use_container_width=True)
     
     st.markdown("---")
-    
+    st.sidebar.markdown("デバッグ情報:") # ← ここまで実行されたか確認
+    st.sidebar.json(future_cache_data.get(base_key, [])) # 読み込んだ未来データを表示
+    st.sidebar.dataframe(forecast_df.head()) # DataFrameの先頭を表示
     # 2. ドロップダウン選択による詳細確率グラフ
     st.subheader("2. 📊 詳細予測確率 (バーンコンディションの割合)")
     
