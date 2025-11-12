@@ -1,0 +1,131 @@
+{
+    "metadata": {
+        "date_run": "2025-11-12T11:15:45.254457",
+        "target_period_days": 5,
+        "data_source": "OpenWeatherMap API Forecast"
+    },
+    "Kandatsu": [
+        {
+            "date": "11月12日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-0.1",
+            "temp_max_c": "4.2",
+            "temp_min_c": "-2.4",
+            "wind_avg_ms": "1.4",
+            "wind_max_ms": "1.5",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月13日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "1.2",
+            "temp_max_c": "7.2",
+            "temp_min_c": "-2.6",
+            "wind_avg_ms": "1.5",
+            "wind_max_ms": "2.1",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月14日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-0.3",
+            "temp_max_c": "3.8",
+            "temp_min_c": "-3.6",
+            "wind_avg_ms": "2.4",
+            "wind_max_ms": "2.9",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月15日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-1.0",
+            "temp_max_c": "4.7",
+            "temp_min_c": "-4.6",
+            "wind_avg_ms": "1.6",
+            "wind_max_ms": "2.1",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月16日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "0.2",
+            "temp_max_c": "5.3",
+            "temp_min_c": "-3.2",
+            "wind_avg_ms": "1.3",
+            "wind_max_ms": "1.9",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        }
+    ],
+    "Marunuma": [
+        {
+            "date": "11月12日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-3.8",
+            "temp_max_c": "-0.9",
+            "temp_min_c": "-7.5",
+            "wind_avg_ms": "0.9",
+            "wind_max_ms": "1.4",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月13日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-3.5",
+            "temp_max_c": "2.9",
+            "temp_min_c": "-8.0",
+            "wind_avg_ms": "1.5",
+            "wind_max_ms": "2.6",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月14日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-4.8",
+            "temp_max_c": "0.6",
+            "temp_min_c": "-7.9",
+            "wind_avg_ms": "2.2",
+            "wind_max_ms": "3.0",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月15日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-5.5",
+            "temp_max_c": "0.4",
+            "temp_min_c": "-9.4",
+            "wind_avg_ms": "1.5",
+            "wind_max_ms": "2.6",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        },
+        {
+            "date": "11月16日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "-5.1",
+            "temp_max_c": "-0.2",
+            "temp_min_c": "-8.6",
+            "wind_avg_ms": "1.1",
+            "wind_max_ms": "2.1",
+            "sunshine_h": "NaN",
+            "snowfall_cm": "0.0",
+            "snow_depth_max_cm": "NaN"
+        }
+    ]
+}
