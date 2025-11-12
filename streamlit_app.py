@@ -9,6 +9,7 @@ from datetime import datetime, date
 import plotly.express as px 
 import sys # エラー処理に利用
 
+
 # --- 0. ファイルと定数の設定 ---
 MODEL_FILE = 'gelecon_predictor_model.pkl'
 # 過去データファイル名は 'past_data.json' と 'CF_data.json' であると仮定
