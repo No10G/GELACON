@@ -121,7 +121,7 @@ def run_model_prediction(feature_data_list, course_elev):
 st.set_page_config(layout="wide")
 
 # ここから追加・変更
-st.markdown("<h1 style='text-align: center;'>❄️ GELECON ゲレンデコンディション予測システム</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>❄️ GALECON ゲレンデコンディション予測システム</h1>", unsafe_allow_html=True)
 st.markdown(
     """
     <p style='text-align: center; color: #777; font-size: 1.1em;'>
