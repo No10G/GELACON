@@ -5,40 +5,40 @@ from collections import defaultdict
 from datetime import datetime, date, timedelta
 import os
 
-# --- 1. 定数とファイル名 ---
-# 傾斜率（気温補正に使用）
+# --- 定数とファイル名 ---
+# 気温補正
 GRADIENT_RATE = 0.6  
 # キャッシュファイル名
 PAST_CACHE_FILE = 'past_data.json'   
 FUTURE_CACHE_FILE = 'CF_data.json' 
 OUTPUT_CACHE_FILE = 'XGBoost_Features_Cache.json'
 
-# アメダス観測所の標高（概算）
+# アメダス観測所の標高
 AMEDAS_ELEVATIONS = {'Kandatsu': 340, 'Marunuma': 370}  
-# コース標高（予測ターゲット）
+# コース標高
 COURSE_TARGETS = {
     'Kandatsu': [900, 700, 500],
     'Marunuma': [1950, 1700, 1500, 1300]
 }
 
-# 過去データ観測所と未来データリゾートの対応
+# 過去データ観測所と未来データ
 PAST_FUTURE_MAPPING = {
     'yuzawa': 'Kandatsu',
     'minakami': 'Marunuma'
 }
 
-# XGBoostモデルが期待する特徴量の順序 (8列)
+# XGBoostモデルが期待する特徴量の順序 
 MODEL_FEATURE_ORDER = [
     'MaxSnowDepth', 'Snowfall', 'AvgWindSpeed', 'Adj_Temp_Min', 
     'Night_Chill_Factor', 'Cumulative_Heat_History', 'Surface_Hardening_Risk', 'Course_Elev'
 ]
 
-# --- 2. メインの特徴量計算関数 ---
+# ---  メインの特徴量計算関数 ---
 def generate_xgboost_features():
     
     print("定数とファイル名の設定が完了しました。")
     
-    # 1. フルパスの計算とJSONファイルのロード
+    # フルパスの計算とJSONファイルのロード
     
     # スクリプトの絶対パスを取得し、ベースディレクトリとする
     try:
@@ -166,7 +166,7 @@ def generate_xgboost_features():
             
             for index, day_data in forecast_df.iterrows():
                 
-                # A. 標高補正 (統一キーを使用)
+                # A. 標高補正 
                 adj_min = day_data['temp_min_c'] - adjustment_value
                 adj_max = day_data['temp_max_c'] - adjustment_value
                 
@@ -177,21 +177,22 @@ def generate_xgboost_features():
                 heat_daily = np.maximum(0, adj_max - 0)
                 cum_heat = cum_heat + heat_daily 
                 
-                # D. 雪面硬化リスク (統一キーを使用)
+                # D. 雪面硬化リスク 
                 hardening_risk = day_data['wind_avg_ms']**2 * (1.5 if adj_min < 0 else 1.0)
                 
-                # E. XGBoostモデル用のレコード作成 (順序厳守)
+                # E. XGBoostモデル用のレコード作成 
+# E. XGBoostモデル用のレコード作成 (順序厳守)
                 record = {
-                    'Date': day_data['date'], 
-                    'MaxSnowDepth': max_snow_depth, 
-                    'Snowfall': day_data['snowfall_cm'], # 統一キーを使用
-                    'AvgWindSpeed': day_data['wind_avg_ms'], # 統一キーを使用
-                    'Adj_Temp_Min': adj_min, 
-                    'Night_Chill_Factor': night_chill, 
-                    'Cumulative_Heat_History': cum_heat,
-                    'Surface_Hardening_Risk': hardening_risk, 
-                    'Course_Elev': course_elev
-}
+                'Date': day_data['date'], 
+                'MaxSnowDepth': max_snow_depth, 
+                'Snowfall': day_data['snowfall_cm'], 
+                'AvgWindSpeed': day_data['wind_avg_ms'], 
+                'Adj_Temp_Min': adj_min, 
+                'Night_Chill_Factor': night_chill, 
+                'Cumulative_Heat_History': cum_heat,
+                'Surface_Hardening_Risk': hardening_risk, 
+                'Course_Elev': course_elev
+                }
                 
                 # モデルの期待する特徴量のみを、期待する順序で格納
                 feature_values = [
@@ -203,6 +204,7 @@ def generate_xgboost_features():
                 course_features.append(final_record)
                 
                 # F. 翌日のために状態を更新
+                max_snow_depth = max_snow_depth + day_data['snowfall_cm']
                 prev_day_max_adj = adj_max # 補正後の最高気温を翌日の基点にする
 
             all_features_for_model[f"{base_resort}_{course_elev}m"] = course_features

@@ -7,8 +7,8 @@ from collections import defaultdict
 import time
 import os
 
-# --- 1. 定数とリゾート設定 (学習データと一致させる) ---
-API_KEY = "712944967f82ebaa54544d29577bd6c6" 
+# ---  定数とリゾート設定 ---
+API_KEY = "APIkey" 
 TODAY = datetime.date.today()
 TARGET_FORECAST_DAYS = 5 
 
@@ -23,7 +23,7 @@ RESORT_SETTINGS = {
     }
 }
 
-# --- 3. 未来の予報データ取得 (OpenWeatherMap API) ---
+# --- 未来の予報データ取得 (OpenWeatherMap API) ---
 def get_future_weather_forecast_owm(api_key, lat, lon):
     """今日から未来5日間のOpenWeatherMap予報データを取得する"""
     
@@ -40,7 +40,7 @@ def get_future_weather_forecast_owm(api_key, lat, lon):
         print(f"APIアクセスエラーが発生しました: {e}")
         return None
 
-# --- 4. メイン処理: データの取得、計算、JSON保存 ---
+# --- メイン処理 ---
 
 def generate_full_cache_file():
     master_cache = {}
@@ -56,16 +56,16 @@ def generate_full_cache_file():
             # 標高補正値 (adj_val) を取得
             correction_value = settings['adj_val'] 
             
-            # 4.3 3時間ごとのデータを日別に集計し、JSONフレンドリーな形式で格納
+            #JSON形式で格納
             daily_data = defaultdict(lambda: {
                 'temp_max': -float('inf'), 
                 'temp_min': float('inf'), 
-                'temp_sum': 0.0, # 平均気温算出用に追加
-                'temp_count': 0, # 平均気温算出用に追加
+                'temp_sum': 0.0, # 平均気温算出用
+                'temp_count': 0, # 平均気温算出用
                 'winds': [], 
                 'snowfall_cm': 0.0, 
-                'precipitation_total_mm': 0.0, # 降水量追加
-                'wind_max_ms': -float('inf'), # 最大風速追加
+                'precipitation_total_mm': 0.0, # 降水量
+                'wind_max_ms': -float('inf'), # 最大風速
                 'date_str': ''
             })
             
@@ -95,10 +95,10 @@ def generate_full_cache_file():
                 # 最大風速を更新
                 daily_data[date_key]['wind_max_ms'] = max(daily_data[date_key]['wind_max_ms'], item['wind']['speed'])
 
-                # 降雪量 (snow.3h) を積算し、cmに変換
+                # 降雪量 を積算し、cmに変換
                 daily_data[date_key]['snowfall_cm'] += item.get('snow', {}).get('3h', 0) / 10 
                 
-                # 降水量 (rain.3h) を積算し、mmで保持
+                # 降水量 を積算し、mmで保持
                 daily_data[date_key]['precipitation_total_mm'] += item.get('rain', {}).get('3h', 0)
                 
                 daily_data[date_key]['date_str'] = date_key.strftime('%m月%d日')
@@ -122,21 +122,19 @@ def generate_full_cache_file():
                     "temp_min_c": str(round(d['temp_min'], 1)),                           # 文字列, 小数点1桁
                     "wind_avg_ms": str(round(np.mean(d['winds']), 1)),                 # 文字列, 小数点1桁
                     "wind_max_ms": str(round(d['wind_max_ms'], 1)),                     # 文字列, 小数点1桁
-                    "sunshine_h": "NaN", # OpenWeatherMapには日照時間がないため、NaNで統一
+                    "sunshine_h": "NaN", # OpenWeatherMapには日照時間がないため、NaN
                     "snowfall_cm": str(round(d['snowfall_cm'], 1)),                     # 文字列, 小数点1桁
-                    "snow_depth_max_cm": "NaN" # OpenWeatherMapには最深積雪がないため、NaNで統一
+                    "snow_depth_max_cm": "NaN" # OpenWeatherMapには最深積雪がないため、NaN
                 })
 
-            # 4.5 過去データと同じ構造に格納
-            # master_cache['resorts'][resort_key] = { 'forecast_data': forecast_list } 
-            # ではなく、過去データと同様に地名（リゾートキー）を直下のキーにする。
+            # 同じ構造に格納
             master_cache[resort_key] = forecast_list 
 
         else:
             print(f"Skipping {resort_key} due to API error.")
 
-    # --- 5. JSONファイルへの出力 ---
-    output_json_filename = 'GELACON/CF_deta.json'
+    # --- JSONファイルへの出力 ---
+    output_json_filename = 'GELACON/CF_data.json'
     
     with open(output_json_filename, 'w', encoding='utf-8') as f:
         master_cache_final = {
@@ -152,7 +150,6 @@ def generate_full_cache_file():
 
     print("\n" + "="*60)
     print(f"気象のデータ取得とキャッシュファイル '{output_json_filename}' の生成が完了しました。")
-    print("このファイルを Webアプリが読み込みます。")
     print("="*60)
 # --- 実行 ---
 if __name__ == '__main__':
