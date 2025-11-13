@@ -1,22 +1,10 @@
 {
     "metadata": {
-        "date_run": "2025-11-12T10:51:53.679759",
+        "date_run": "2025-11-12T15:40:17.006302",
         "target_period_days": 5,
         "data_source": "JMA Past Weather Data (Web Scraping)"
     },
     "yuzawa": [
-        {
-            "date": "11月7日",
-            "precipitation_total_mm": "0.5",
-            "temp_avg_c": "11.1",
-            "temp_max_c": "14.7",
-            "temp_min_c": "7.5",
-            "wind_avg_ms": "2.6",
-            "wind_max_ms": "7.3",
-            "sunshine_h": "3.0",
-            "snowfall_cm": "0",
-            "snow_depth_max_cm": "0"
-        },
         {
             "date": "11月8日",
             "precipitation_total_mm": "0.0",
@@ -64,21 +52,21 @@
             "sunshine_h": "0.2",
             "snowfall_cm": "0",
             "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月12日",
+            "precipitation_total_mm": "///",
+            "temp_avg_c": "///",
+            "temp_max_c": "///",
+            "temp_min_c": "///",
+            "wind_avg_ms": "///",
+            "wind_max_ms": "///",
+            "sunshine_h": "///",
+            "snowfall_cm": "///",
+            "snow_depth_max_cm": "///"
         }
     ],
     "minakami": [
-        {
-            "date": "11月7日",
-            "precipitation_total_mm": "0.0",
-            "temp_avg_c": "11.4",
-            "temp_max_c": "14.1",
-            "temp_min_c": "7.9",
-            "wind_avg_ms": "2.5",
-            "wind_max_ms": "5.0",
-            "sunshine_h": "3.3",
-            "snowfall_cm": "0",
-            "snow_depth_max_cm": "0"
-        },
         {
             "date": "11月8日",
             "precipitation_total_mm": "0.0",
@@ -126,6 +114,18 @@
             "sunshine_h": "4.8",
             "snowfall_cm": "0",
             "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月12日",
+            "precipitation_total_mm": "///",
+            "temp_avg_c": "///",
+            "temp_max_c": "///",
+            "temp_min_c": "///",
+            "wind_avg_ms": "///",
+            "wind_max_ms": "///",
+            "sunshine_h": "///",
+            "snowfall_cm": "///",
+            "snow_depth_max_cm": "///"
         }
     ]
 }

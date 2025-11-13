@@ -12,7 +12,7 @@ import sys # エラー処理に利用
 
 # --- 0. ファイルと定数の設定 ---
 MODEL_FILE = 'gelecon_predictor_model.pkl'
-# 過去データファイル名は 'past_data.json' と 'CF_data.json' であると仮定
+# 過去データファイル
 PAST_CACHE_FILE = 'past_data.json'
 FUTURE_CACHE_FILE = 'CF_data.json' 
 GRADIENT_RATE = 0.6
@@ -223,6 +223,4 @@ if model_loaded:
 
 # --- 実行 ---
 if __name__ == '__main__':
-    # Streamlitアプリとして実行する際は、このファイル名を指定してコマンドラインから実行します。
-    # 例: streamlit run streamlit_app.py
     pass
