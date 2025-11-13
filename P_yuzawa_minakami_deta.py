@@ -10,6 +10,7 @@ from collections import defaultdict
 # 取得したいデータの基準日
 TODAY = datetime.date(2025, 11, 11) # 動作確認のため固定。実際は datetime.date.today() を使用してください。
 TARGET_DAYS = 5
+OUTPUT_FILENAME = "GELACON/past_data.json" 
 
 # 観測所のパラメータ（JSON出力のために地点名も追加）
 OBSERVATORIES = {
@@ -106,7 +107,7 @@ def get_past_weather_data(today, target_days, obs_code):
     return weather_data_list
 
 
-# --- 3. メイン処理とJSON出力 ---
+# --- 3. メイン処理とJSONファイル出力 ---
 
 # 湯沢と水上のデータを取得
 yuzawa_data = get_past_weather_data(TODAY, TARGET_DAYS, "yuzawa")
@@ -123,10 +124,17 @@ final_json_output = {
     "minakami": minakami_data
 }
 
-# JSON形式でコンソールに出力
-print("\n" + "="*50)
-print("### ✅ 統合データ出力 (JSON形式)")
-print("="*50)
+# JSON形式でファイルに保存 
+try:
+    with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
+        # indent=4 で整形し、ensure_ascii=False で日本語をそのまま保存
+        json.dump(final_json_output, f, indent=4, ensure_ascii=False)
+    
+    print("\n" + "="*50)
+    print(f"データ保存完了！")
+    print(f"データはファイル '{OUTPUT_FILENAME}' にJSON形式で保存されました。")
+    print("="*50)
 
-# JSON出力を整形して表示
-print(json.dumps(final_json_output, indent=4, ensure_ascii=False))
+except Exception as e:
+    print(f"\n--- エラー: ファイル保存に失敗しました ---")
+    print(f"詳細: {e}")

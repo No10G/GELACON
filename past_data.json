@@ -1,0 +1,131 @@
+{
+    "metadata": {
+        "date_run": "2025-11-12T10:51:53.679759",
+        "target_period_days": 5,
+        "data_source": "JMA Past Weather Data (Web Scraping)"
+    },
+    "yuzawa": [
+        {
+            "date": "11月7日",
+            "precipitation_total_mm": "0.5",
+            "temp_avg_c": "11.1",
+            "temp_max_c": "14.7",
+            "temp_min_c": "7.5",
+            "wind_avg_ms": "2.6",
+            "wind_max_ms": "7.3",
+            "sunshine_h": "3.0",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月8日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "9.9",
+            "temp_max_c": "14.2",
+            "temp_min_c": "6.3",
+            "wind_avg_ms": "1.6",
+            "wind_max_ms": "4.1",
+            "sunshine_h": "6.1",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月9日",
+            "precipitation_total_mm": "8.0",
+            "temp_avg_c": "11.9",
+            "temp_max_c": "15.8",
+            "temp_min_c": "9.1",
+            "wind_avg_ms": "1.1",
+            "wind_max_ms": "4.1",
+            "sunshine_h": "0.0",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月10日",
+            "precipitation_total_mm": "60.0",
+            "temp_avg_c": "8.7",
+            "temp_max_c": "13.3",
+            "temp_min_c": "6.1",
+            "wind_avg_ms": "2.8",
+            "wind_max_ms": "7.4",
+            "sunshine_h": "0.3",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月11日",
+            "precipitation_total_mm": "14.0",
+            "temp_avg_c": "7.1",
+            "temp_max_c": "10.9",
+            "temp_min_c": "5.1",
+            "wind_avg_ms": "1.7",
+            "wind_max_ms": "6.5",
+            "sunshine_h": "0.2",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        }
+    ],
+    "minakami": [
+        {
+            "date": "11月7日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "11.4",
+            "temp_max_c": "14.1",
+            "temp_min_c": "7.9",
+            "wind_avg_ms": "2.5",
+            "wind_max_ms": "5.0",
+            "sunshine_h": "3.3",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月8日",
+            "precipitation_total_mm": "0.0",
+            "temp_avg_c": "9.7",
+            "temp_max_c": "15.5",
+            "temp_min_c": "5.5",
+            "wind_avg_ms": "1.9",
+            "wind_max_ms": "5.0",
+            "sunshine_h": "8.2",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月9日",
+            "precipitation_total_mm": "12.0",
+            "temp_avg_c": "8.9",
+            "temp_max_c": "11.0",
+            "temp_min_c": "7.1",
+            "wind_avg_ms": "1.4",
+            "wind_max_ms": "3.3",
+            "sunshine_h": "0.0",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月10日",
+            "precipitation_total_mm": "20.0",
+            "temp_avg_c": "8.3",
+            "temp_max_c": "13.1",
+            "temp_min_c": "4.3",
+            "wind_avg_ms": "2.5",
+            "wind_max_ms": "6.5",
+            "sunshine_h": "5.6",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        },
+        {
+            "date": "11月11日",
+            "precipitation_total_mm": "1.5",
+            "temp_avg_c": "6.8",
+            "temp_max_c": "10.8",
+            "temp_min_c": "4.7",
+            "wind_avg_ms": "1.7",
+            "wind_max_ms": "3.5",
+            "sunshine_h": "4.8",
+            "snowfall_cm": "0",
+            "snow_depth_max_cm": "0"
+        }
+    ]
+}

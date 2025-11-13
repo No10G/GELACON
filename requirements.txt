@@ -4,5 +4,4 @@ numpy
 requests
 joblib
 xgboost
-scikit-learn
-matplotlib
+plotly
