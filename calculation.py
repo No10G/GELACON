@@ -64,14 +64,14 @@ def generate_xgboost_features():
     
     except FileNotFoundError as e:
         print("\n" + "="*50)
-        print("🚨 致命的なファイル読み込みエラーが発生しました (FileNotFoundError) 🚨")
+        print(" 致命的なファイル読み込みエラーが発生しました (FileNotFoundError) ")
         print(f"アクセスを試みたファイル: {e.filename}")
         print("ファイル名またはパスを確認してください。")
         print("="*50)
         return
     except json.JSONDecodeError:
         print("\n" + "="*50)
-        print("🚨 致命的なJSON解析エラーが発生しました (JSONDecodeError) 🚨")
+        print(" 致命的なJSON解析エラーが発生しました (JSONDecodeError) ")
         print(f"ファイル {PAST_CACHE_FILE} または {FUTURE_CACHE_FILE} の内容が不正です。")
         print("JSONファイルの構文を確認してください。")
         print("="*50)
@@ -96,7 +96,6 @@ def generate_xgboost_features():
             print(f"エラー: {past_key} の過去データが不足しています（2日未満）。スキップします。")
             continue
             
-        # ⚠️ 動的な日付基点: 最終日とその前日を動的に特定 ⚠️
         prev_day_max_temp = df_past['temp_max_c'].iloc[-2] # 最新日の前日の最高気温
         df_latest_day = df_past.iloc[-1] # 最新日のデータ
         
@@ -137,7 +136,7 @@ def generate_xgboost_features():
              
         forecast_df = pd.DataFrame(forecast_data)
         
-        # 🚨 キー統一後の数値変換 🚨
+        #  キー統一後の数値変換 
         # CF_data.jsonのキーを使用
         numeric_cols = ['temp_max_c', 'temp_min_c', 'wind_avg_ms', 'snowfall_cm']
         for col in numeric_cols:

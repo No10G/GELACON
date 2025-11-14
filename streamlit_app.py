@@ -8,7 +8,7 @@ import plotly.express as px
 import sys 
 
 # --- 0. ファイルと定数の設定 ---
-MODEL_FILE = 'gelacon_predictor_model.pkl,'
+MODEL_FILE = 'gelacon_predictor_modela.pkl,'
 PAST_CACHE_FILE = 'past_data.json'
 FUTURE_CACHE_FILE = 'CF_data.json' 
 FEATURE_CACHE_FILE = 'XGBoost_Features_Cache.json'
